@@ -1,0 +1,27 @@
+title Osa0 - 0.5
+
+note over selain:
+Käyttäjä menee osoitteeseen 
+https://studies.cs.helsinki.fi/exampleapp/spa
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+palvelin->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin->selain: CSS-koodi
+selain->palvelin: https://studies.cs.helsinki.fi/exampleapp/spa.js
+palvelin->selain: JS-koodi
+
+note over selain:
+Selain suorittaa Javascript-koodin (spa.js),
+joka hakee data.json-tiedoston
+(=notes-lista) palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin->selain: data.json
+
+note over selain:
+Selain suorittaa redrawNotes-funktion (spa.js),
+joka muotoilee notes-listan sivulle
+end note

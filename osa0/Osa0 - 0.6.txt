@@ -1,0 +1,18 @@
+title Osa0 - 0.6
+
+note over selain:
+Käyttäjä luo uuden muistiinpanon
+ja painaa Save
+end note
+
+note over selain:
+spa.js estää formin oletustoiminnot,
+luo uuden noten syötteestä,
+lisää sen notes-listaan,
+päivittää sivun listan (redrawNotes),
+kutsuu sendToServer-funktiota,
+joka lähettää uuden noten palvelimelle JSON-muodossa
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+palvelin->selain: Created (201)

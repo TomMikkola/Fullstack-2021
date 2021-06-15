@@ -1,0 +1,36 @@
+title Osa0 - 0.4
+
+note over selain:
+Käyttäjä painaa tallenna.
+Selain lähettää formin tiedot palvelimelle
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over palvelin:
+Palvelin lisää formin tiedot notes-listaan
+ja uudelleenohjaa sivulle /notes
+end note
+
+palvelin->selain: Uudelleenohjaus (302)
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin->selain: CSS-koodi
+selain->palvelin: https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin->selain: JS-koodi
+
+note over selain:
+Selain suorittaa Javascript-koodin (main.js),
+joka hakee data.json-tiedoston
+(=notes-lista) palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin->selain: data.json
+
+note over selain:
+Selain suorittaa main.js-tiedoston funktion,
+joka muotoilee notesit (vanhat ja lisätyn)
+listaksi sivulle
+end note
