@@ -57,7 +57,8 @@ function App() {
       Services
         .createPerson( newPerson )
         .then( response => {
-          setPersons( persons.concat(response) )
+          /* setPersons( persons.concat(response) ) */
+          setPersons( response )
           setNotificationMessage({...notificationMessage, message: `Added ${newName}`, task: 'add'})
           setTimeout( () => {
             setNotificationMessage({message: '', task: ''})

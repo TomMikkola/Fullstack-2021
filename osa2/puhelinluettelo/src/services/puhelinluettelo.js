@@ -1,5 +1,5 @@
 import axios from 'axios'
-const url = 'http://localhost:3001/persons'
+const url = 'https://blooming-taiga-62965.herokuapp.com/api/persons'
 
 const getAll = () => {
     const request = axios.get(url)
