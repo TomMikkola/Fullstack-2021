@@ -58,14 +58,15 @@ function App() {
         .createPerson( newPerson )
         .then( response => {
           /* setPersons( persons.concat(response) ) */
-          setPersons( response )
+          const updatedPersons = persons.concat(response)
+          setPersons( updatedPersons )
           setNotificationMessage({...notificationMessage, message: `Added ${newName}`, task: 'add'})
           setTimeout( () => {
             setNotificationMessage({message: '', task: ''})
           }, 3000)
         })
-        .catch( () => {
-          setNotificationMessage({...notificationMessage, message: `Something went wrong creating ${newName}. Please try again.`, task: 'error' })
+        .catch( error => {
+          setNotificationMessage({...notificationMessage, message: error.message, task: 'error' })
           setTimeout( () => {
             setNotificationMessage({message: '', task: ''})
           }, 3000)
