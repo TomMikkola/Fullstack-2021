@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3Rpa8OkeXR0w6Rqw6QiLCJpZCI6IjYwZmZlYzYwZDVjNTY4NDQ2ODg3MDNiOSIsImlhdCI6MTYyNzM4NTAxMX0.NPX4AMSeqwp75HSgN5Le-okTGsJvsHn-qigFALRcS7c
+
+{
+  "title": "Testi blog",
+  "author": "Testi blogin kirjoittaja",
+  "url": "BlogURL",
+  "likes": 10,
+  "user": "60fe83480cb2335118b56ce3"
+}

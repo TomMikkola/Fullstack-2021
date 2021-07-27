@@ -45,8 +45,8 @@ function App() {
               setNotificationMessage({message: '', task: ''})
             }, 3000)
           } )
-          .catch( () => {
-            setNotificationMessage({...notificationMessage, message: `Something went wrong updating ${newName} information. Please try again`, task: 'error' })
+          .catch( error => {
+            setNotificationMessage({...notificationMessage, message: error.response.data.error, task: 'error' })
             setTimeout( () => {
               setNotificationMessage({message: '', task: ''})
             }, 3000)
@@ -56,9 +56,8 @@ function App() {
       
       Services
         .createPerson( newPerson )
-        .then( response => {
-          /* setPersons( persons.concat(response) ) */
-          const updatedPersons = persons.concat(response)
+        .then( createdPerson => {
+          const updatedPersons = persons.concat(createdPerson)
           setPersons( updatedPersons )
           setNotificationMessage({...notificationMessage, message: `Added ${newName}`, task: 'add'})
           setTimeout( () => {
@@ -66,7 +65,7 @@ function App() {
           }, 3000)
         })
         .catch( error => {
-          setNotificationMessage({...notificationMessage, message: error.message, task: 'error' })
+          setNotificationMessage({...notificationMessage, message: error.response.data.error, task: 'error' })
           setTimeout( () => {
             setNotificationMessage({message: '', task: ''})
           }, 3000)

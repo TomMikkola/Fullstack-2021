@@ -17,14 +17,15 @@ const deletePerson = (id) => {
 }
 
 const updatePerson = (id, newPerson) => {
-    //console.log("persoonasta ", url+`/${id}`, newPerson)
     const request = axios.put(url+`/${id}`, newPerson)
     return request.then( response => response.data )
 }
 
-export default {
+const functions = {
     getAll,
     createPerson,
     deletePerson,
     updatePerson
 }
+
+export default functions
