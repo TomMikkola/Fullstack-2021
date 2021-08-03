@@ -67,13 +67,13 @@ blogsRouter.delete('/:id', async (request, response) => {
 
     } else {
       response.status(401).json({
-        error: "Blog can be deleted only by the user that posted the blog"
+        error: 'Blog can be deleted only by the user that posted the blog'
       })
     }
 
   } else {
     response.status(400).json({
-      error: "Blog not found with the id"
+      error: 'Blog not found with the id'
     })
   }
 })
@@ -85,12 +85,16 @@ blogsRouter.put('/:id', async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user: body.user.id
   }
 
   try{
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, update, {new: true})
-    response.json(updatedBlog.toJSON())
+    /* const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, update, {new: true})
+    response.json(updatedBlog.toJSON()) */
+    await Blog.findByIdAndUpdate(request.params.id, update, {new: true})
+    const updatedBlogs = await Blog.find({}).populate('user', {username: 1, name: 1, id: 1})
+    response.json( updatedBlogs.map( blog => blog.toJSON()) )
   } catch(exception){
     console.log(exception)
   }

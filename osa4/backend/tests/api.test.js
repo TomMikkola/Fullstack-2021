@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const User = require('../models/user')
@@ -11,9 +12,9 @@ describe('Blogs...', () => {
     await User.deleteMany({})
 
     const user = {
-      username: "Testikäyttäjä",
-      name: "Terhi Testi",
-      password: "sekreto"
+      username: 'Testikäyttäjä',
+      name: 'Terhi Testi',
+      password: 'sekreto'
     }
 
     await api.post('/api/users').send(user)
@@ -34,8 +35,8 @@ describe('Blogs...', () => {
   })
 
   test('are saved to db in specific amount', async () => {
-      const response = await api.get('/api/blogs')
-      expect(response.body).toHaveLength(2)
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(2)
   })
 
   test('id is identified as id', async () => {
@@ -53,11 +54,11 @@ describe('Blogs...', () => {
     initLength = response.body.length
 
     const testBlog = {
-        title: 'Supertest',
-        author: 'Supertest',
-        url: 'Supertest',
-        likes: 100,
-        user: user.id
+      title: 'Supertest',
+      author: 'Supertest',
+      url: 'Supertest',
+      likes: 100,
+      user: user.id
     }
 
     response = await api
@@ -122,11 +123,11 @@ describe('Blogs...', () => {
     const initLength = response.body.length
       
     const testBlog = {
-          title: 'Supertest',
-          author: 'Supertest',
-          url: 'Supertest',
-          likes: 100,
-          user: user.id
+      title: 'Supertest',
+      author: 'Supertest',
+      url: 'Supertest',
+      likes: 100,
+      user: user.id
     }
     
     await api
@@ -149,16 +150,16 @@ describe('Blogs...', () => {
 
   test('can be updated', async () => {
 
-      const result = await api.get('/api/blogs')
-      const blog = result.body[2]
-      const initBlogLikes = blog.likes
-      blog.likes++
+    const result = await api.get('/api/blogs')
+    const blog = result.body[2]
+    const initBlogLikes = blog.likes
+    blog.likes++
 
-      const response = await api
-        .put(`/api/blogs/${blog.id}`)
-        .send(blog)
+    const response = await api
+      .put(`/api/blogs/${blog.id}`)
+      .send(blog)
       
-      expect( response.body.likes ).toBe( initBlogLikes + 1 )
+    expect( response.body.likes ).toBe( initBlogLikes + 1 )
   })
 
   test('can`t be posted without token', async () => {
@@ -166,14 +167,14 @@ describe('Blogs...', () => {
     const user = users.body.find( user => user.username === loginInfo.username )
 
     const testBlog = {
-        title: 'Supertest',
-        author: 'Supertest',
-        url: 'Supertest',
-        likes: 100,
-        user: user.id
+      title: 'Supertest',
+      author: 'Supertest',
+      url: 'Supertest',
+      likes: 100,
+      user: user.id
     }
 
-    response = await api
+    await api
       .post('/api/blogs')
       .send(testBlog)
       .expect(401)
@@ -283,5 +284,5 @@ describe('Users...', () => {
 })
 
 afterAll( () => {
-    mongoose.connection.close()
+  mongoose.connection.close()
 })
