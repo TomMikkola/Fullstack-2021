@@ -1,11 +1,15 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3Rpa8OkeXR0w6Rqw6QiLCJpZCI6IjYwZmZlYzYwZDVjNTY4NDQ2ODg3MDNiOSIsImlhdCI6MTYyNzM4NTAxMX0.NPX4AMSeqwp75HSgN5Le-okTGsJvsHn-qigFALRcS7c
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjYxMTRjZjNkNGRiYThmMzAxMGRmMDZjMiIsImlhdCI6MTYyODg0NTM2MX0.i1xJU-00ir1WpyxviANl07TqDI_SdchzqEy8CJwPQQE
 
 {
-  "title": "Testi blog",
+  "title": "Commented blog2",
   "author": "Testi blogin kirjoittaja",
-  "url": "BlogURL",
+  "url": "BlogURL.org",
   "likes": 10,
-  "user": "60fe83480cb2335118b56ce3"
+  "user": "60fe83480cb2335118b56ce3",
+  "comments": [
+    "Awesome stuff",
+    "Work of the master of the universe"
+  ]
 }

@@ -1,150 +1,95 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { initialBlogs } from './reducers/blogsReducer'
+import { initialUsers } from './reducers/usersReducer'
+import { setUser } from './reducers/loginReducer'
+
+import BlogList from './components/BlogList'
+import UserList from './components/UserList'
+import LoginForm from './components/LoginForm'
+import User from './components/User'
 import Blog from './components/Blog'
-import Toggleable from './components/Toggleable'
-import PostBlogForm from './components/PostBlogForm'
+import Menu from './components/Menu'
+import Notification from './components/Notification'
+
 import blogService from './services/blogs'
-import loginService from './services/login'
 
-import PropTypes from 'prop-types'
-
-const LoginForm = ({ notification, handleLogin, username, setUsername, password, setPassword }) => {
-  return <>
-    <h2>Log in to application</h2>
-    <div>{notification}</div>
-    <form onSubmit={handleLogin}>
-      <div>
-        Username
-        <input
-          id="username"
-          type="text"
-          name="username"
-          value={username}
-          onChange={ ({ target }) => setUsername(target.value) }
-        />
-      </div>
-      <div>
-      Password
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={password}
-          onChange={ ({ target }) => setPassword(target.value) }
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
-  </>
-}
-
-LoginForm.propTypes = {
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  handleLogin: PropTypes.func.isRequired
-}
+import {
+  Switch, Route, useRouteMatch
+} from 'react-router-dom'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const dispatch = useDispatch()
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
-  const [notification, setNotification] = useState('')
-
-  const postBlogRef = useRef()
+  const user = useSelector( state => state.user)
+  const users = useSelector( state => state.users)
+  const blogs = useSelector( state => state.blogs )
 
   useEffect( async () => {
-    const responseBlogs = await blogService.getAll()
-    setBlogs( responseBlogs )
+    dispatch( initialBlogs() )
+    dispatch( initialUsers() )
 
     const loggedUser = window.localStorage.getItem('loggedUser')
     if( loggedUser ){
-      setUser( JSON.parse(loggedUser) )
+      dispatch( setUser( JSON.parse(loggedUser) ) )
       blogService.setToken(JSON.parse(loggedUser).token)
     }
   }, [])
 
-  const handleLogin = async event => {
-    event.preventDefault()
+  const getUserById = (id) =>
+    users.find( user => user.id === id)
 
-    try{
-      const loggedUser = await loginService.login({ username, password })
-      setUser(loggedUser)
-      setUsername('')
-      setPassword('')
+  const getBlogById = (id) =>
+    blogs.find( blog => blog.id === id )
 
-      window.localStorage.setItem('loggedUser', JSON.stringify(loggedUser) )
-      blogService.setToken(loggedUser.token)
+  const userMatch = useRouteMatch('/users/:id')
+  const userInDetail = userMatch
+    ? getUserById(userMatch.params.id)
+    : null
 
-    } catch(exception){
-      setNotification('wrong username or password')
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
-    }
-
-  }
-
-  const handleLogout = () => {
-    window.localStorage.clear()
-    setUser(null)
-  }
-
-  const createBlog = async (newBlog) => {
-    try{
-      const addedBlog = await blogService.create(newBlog)
-      const updatedBlogs = blogs.concat(addedBlog)
-      setBlogs(updatedBlogs)
-
-      setNotification(`a new blog "${newBlog.title}" by "${newBlog.author}" added`)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
-
-      postBlogRef.current.toggleVisibility()
-    } catch(exception) {
-      console.log(exception)
-    }
-  }
-
-  const likeABlog = async (blog) => {
-    const updatedBlog = { ...blog, likes: blog.likes+1 }
-    const returnedBlogs = await blogService.update(updatedBlog)
-    setBlogs(returnedBlogs)
-  }
-
-  const deleteBlog = async (blog) => {
-    await blogService.deleteBlog(blog)
-    const updatedBlogs = blogs.filter( initBlog => blog.id === initBlog.id ?null :initBlog)
-    setBlogs(updatedBlogs)
-  }
-
-  const postBlogForm = () => (
-    <Toggleable buttonLabel="create a new blog" ref={postBlogRef}>
-      <PostBlogForm createBlog = {createBlog} />
-    </Toggleable>
-  )
-
-  const sortBlogs = (blogs) => {
-    blogs.sort( (elem1, elem2) => ( elem1.likes > elem2.likes ? -1 : 1 ) )
-    return(
-      <div id="blogDiv">{blogs.map(blog => <Blog key={blog.id} blog={blog} user={user} likeABlog={likeABlog} deleteBlog={deleteBlog}/>)}</div>
-    )
-  }
+  const blogMatch = useRouteMatch('/blogs/:id')
+  const blogInDetail = blogMatch
+    ? getBlogById(blogMatch.params.id)
+    : null
 
   return (
     <>
       { user === null
-        ? <LoginForm notification={notification} handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
+        ? <LoginForm />
         : <>
-          <div>
-            <h2>blogs</h2>
-            <p> {user.name} is logged in <button onClick={handleLogout}>logout</button> </p>
-            <div>{notification}</div>
-            {postBlogForm()}
-            <div> {sortBlogs( blogs )} </div>
-          </div>
+          <Menu/>
+          <Switch>
+
+            <Route path='/users/:id'>
+              <Notification />
+              {userInDetail
+                ? <User user={userInDetail} />
+                : null
+              }
+            </Route>
+
+            <Route path='/blogs/:id'>
+              <h2>blogs</h2>
+              <Notification />
+              {blogInDetail
+                ? <Blog blog={blogInDetail} inDetail={true}/>
+                : null
+              }
+            </Route>
+
+            <Route path='/users'>
+              <Notification />
+              <UserList />
+            </Route>
+
+            <Route path='/'>
+              <h2>blogs</h2>
+              <Notification />
+              <BlogList />
+            </Route>
+
+          </Switch>
         </>
       }
     </>

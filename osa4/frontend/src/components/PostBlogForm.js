@@ -1,10 +1,28 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addNewBlog } from '../reducers/blogsReducer'
+import { setNotification } from '../reducers/notificationReducer'
 import PropTypes from 'prop-types'
 
-const PostBlogForm = ({ createBlog }) => {
+import { FormControl, InputLabel, Input, Button } from '@material-ui/core'
+
+const PostBlogForm = ({ hideForm }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const dispatch = useDispatch()
+
+  const createBlog = async (newBlog) => {
+    try{
+      dispatch( addNewBlog(newBlog) )
+      dispatch( setNotification(`a new blog "${newBlog.title}" by "${newBlog.author}" added`, 5) )
+
+      hideForm.current.toggleVisibility()
+    } catch(exception) {
+      console.log(exception)
+    }
+  }
 
   const handleCreateNew = (event) => {
     event.preventDefault()
@@ -26,38 +44,58 @@ const PostBlogForm = ({ createBlog }) => {
     <>
       <h2>create new</h2>
       <form onSubmit={handleCreateNew}>
-        <div>title
-          <input
-            id="title"
-            type="text"
-            name="title"
-            value={title}
-            onChange={ ({ target }) => setTitle(target.value)}/>
+        <div>
+          <FormControl>
+            <InputLabel>Title</InputLabel>
+            <Input
+              id="title"
+              type="text"
+              name="title"
+              value={title}
+              onChange={ ({ target }) => setTitle(target.value)}/>
+          </FormControl>
         </div>
-        <div>author
-          <input
-            id="author"
-            type="text"
-            name="author"
-            value={author}
-            onChange={ ({ target }) => setAuthor(target.value)}/>
+
+        <div>
+          <FormControl>
+            <InputLabel>Author</InputLabel>
+            <Input
+              id="author"
+              type="text"
+              name="author"
+              value={author}
+              onChange={ ({ target }) => setAuthor(target.value)}/>
+          </FormControl>
         </div>
-        <div>url
-          <input
-            id="url"
-            type="text"
-            name="url"
-            value={url}
-            onChange={ ({ target }) => setUrl(target.value)}/>
+
+        <div>
+          <FormControl>
+            <InputLabel>URL</InputLabel>
+            <Input
+              id="url"
+              type="text"
+              name="url"
+              value={url}
+              onChange={ ({ target }) => setUrl(target.value)}/>
+          </FormControl>
         </div>
-        <button id="submitBlog" type="submit">create</button>
+
+        <Button
+          variant='contained'
+          color='primary'
+          size='small'
+          id='submitBlog'
+          type="submit"
+        >
+          Create
+        </Button>
       </form>
     </>
   )
 }
 
 PostBlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired
+  hideForm: PropTypes.object.isRequired
 }
 
 export default PostBlogForm

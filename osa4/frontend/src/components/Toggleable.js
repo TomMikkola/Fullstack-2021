@@ -1,6 +1,9 @@
 import React, { useState, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 
+import { Button } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
+
 // eslint-disable-next-line react/display-name
 const Toggleable = React.forwardRef( (props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -22,12 +25,22 @@ const Toggleable = React.forwardRef( (props, ref) => {
     <>
       <div>
         <div style={hidden}>
-          <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+          <Button
+            variant="contained"
+            endIcon={ <AddIcon /> }
+            onClick={ toggleVisibility }
+          >{props.buttonLabel}</Button>
         </div>
       </div>
       <div style={show}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button
+          variant='contained'
+          size='small'
+          onClick={ toggleVisibility }
+        >
+            Cancel
+        </Button>
       </div>
     </>
   )
