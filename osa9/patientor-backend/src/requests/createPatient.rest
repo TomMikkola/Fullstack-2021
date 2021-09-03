@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Tero Testaaja",
+  "dateOfBirth": "01-01-2021",
+  "ssn": "asd-asd-asd",
+  "gender": "male",
+  "occupation": "Tester"
+}
